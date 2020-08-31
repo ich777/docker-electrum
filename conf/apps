@@ -1,5 +1,4 @@
 [app] (Title=.*)
-  [Position]    (WINCENTER)     {0 0}
   [Layer]	{2}
   [Maximized]	{yes}
   [Deco]	{none}
