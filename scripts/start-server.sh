@@ -51,6 +51,11 @@ if [ ! -d /tmp/runtime-electrum ]; then
 	mkdir -p /tmp/runtime-electrum
 	chmod -R 0700 /tmp/runtime-electrum
 fi
+if [ ! -f ${DATA_DIR}/.electrum/config ]; then
+	echo "{
+    \"is_maximized\": true
+}" | tee ${DATA_DIR}/.electrum/config
+fi
 echo "---Resolution check---"
 if [ -z "${CUSTOM_RES_W} ]; then
 	CUSTOM_RES_W=1024
@@ -59,11 +64,11 @@ if [ -z "${CUSTOM_RES_H} ]; then
 	CUSTOM_RES_H=768
 fi
 
-if [ "${CUSTOM_RES_W}" -le 1024 ]; then
+if [ "${CUSTOM_RES_W}" -le 1023 ]; then
 	echo "---Width to low must be a minimal of 1024 pixels, correcting to 1024...---"
     CUSTOM_RES_W=1024
 fi
-if [ "${CUSTOM_RES_H}" -le 768 ]; then
+if [ "${CUSTOM_RES_H}" -le 767 ]; then
 	echo "---Height to low must be a minimal of 768 pixels, correcting to 768...---"
     CUSTOM_RES_H=768
 fi
