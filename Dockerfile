@@ -12,12 +12,12 @@ RUN export TZ=Europe/Rome && \
 	rm /usr/share/novnc/app/images/icons/*
 
 
-ENV DATA_DIR=/elektrum
+ENV DATA_DIR=/electrum
 ENV UMASK=000
 ENV UID=99
 ENV GID=100
 ENV DATA_PERM=770
-ENV USER="elektrum"
+ENV USER="electrum"
 
 RUN mkdir $DATA_DIR && \
 	useradd -d $DATA_DIR -s /bin/bash $USER && \
