@@ -30,7 +30,7 @@ COPY /icons/* /usr/share/novnc/app/images/icons/
 COPY /conf/ /etc/.fluxbox/
 RUN chmod -R 770 /opt/scripts/ && \
 	chown -R ${UID}:${GID} /etc/.fluxbox && \
-	chmod -R 770 /etc/.fluxbo
+	chmod -R 770 /etc/.fluxbox
 
 EXPOSE 8080
 
