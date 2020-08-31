@@ -44,6 +44,25 @@ elif [ "$CUR_V" == "$LAT_V" ]; then
 fi
 
 echo "---Preparing Server---"
+if [ ! -d ${DATA_DIR}/.electrum/wallets ]; then
+	mkdir ${DATA_DIR}/.electrum/wallets
+fi
+echo "---Resolution check---"
+if [ -z "${CUSTOM_RES_W} ]; then
+	CUSTOM_RES_W=1024
+fi
+if [ -z "${CUSTOM_RES_H} ]; then
+	CUSTOM_RES_H=768
+fi
+
+if [ "${CUSTOM_RES_W}" -le 1024 ]; then
+	echo "---Width to low must be a minimal of 1024 pixels, correcting to 1024...---"
+    CUSTOM_RES_W=1024
+fi
+if [ "${CUSTOM_RES_H}" -le 768 ]; then
+	echo "---Height to low must be a minimal of 768 pixels, correcting to 768...---"
+    CUSTOM_RES_H=768
+fi
 echo "---Checking for old logfiles---"
 find $DATA_DIR -name "XvfbLog.*" -exec rm -f {} \;
 find $DATA_DIR -name "x11vncLog.*" -exec rm -f {} \;
@@ -66,6 +85,6 @@ echo "---Starting noVNC server---"
 websockify -D --web=/usr/share/novnc/ --cert=/etc/ssl/novnc.pem 8080 localhost:5900
 sleep 2
 
-echo "---Starting jDownloader2---"
+echo "---Starting Electrum---"
 cd ${DATA_DIR}
 /usr/bin/python3 ${DATA_DIR}/run_electrum
