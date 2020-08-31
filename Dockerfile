@@ -22,14 +22,15 @@ ENV USER="electrum"
 RUN mkdir $DATA_DIR && \
 	useradd -d $DATA_DIR -s /bin/bash $USER && \
 	chown -R $USER $DATA_DIR && \
+	mkdir /etc/.fluxbox && \
 	ulimit -n 2048
 
 ADD /scripts/ /opt/scripts/
 # COPY /icons/* /usr/share/novnc/app/images/icons/
-# COPY /JD/* /tmp/
+COPY /config/ /etc/.fluxbox
 RUN chmod -R 770 /opt/scripts/ && \
-	chown -R ${UID}:${GID} /mnt && \
-	chmod -R 770 /mnt
+	chown -R ${UID}:${GID} /etc/.fluxbox && \
+	chmod -R 770 /etc/.fluxbo
 
 EXPOSE 8080
 
