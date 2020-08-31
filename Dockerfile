@@ -27,7 +27,7 @@ RUN mkdir $DATA_DIR && \
 
 ADD /scripts/ /opt/scripts/
 COPY /icons/* /usr/share/novnc/app/images/icons/
-COPY /config/ /etc/.fluxbox
+COPY /conf/ /etc/.fluxbox
 RUN chmod -R 770 /opt/scripts/ && \
 	chown -R ${UID}:${GID} /etc/.fluxbox && \
 	chmod -R 770 /etc/.fluxbo
