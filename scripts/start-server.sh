@@ -45,7 +45,7 @@ fi
 
 echo "---Preparing Server---"
 if [ ! -d ${DATA_DIR}/.electrum/wallets ]; then
-	mkdir ${DATA_DIR}/.electrum/wallets
+	mkdir -p ${DATA_DIR}/.electrum/wallets
 fi
 echo "---Resolution check---"
 if [ -z "${CUSTOM_RES_W} ]; then
