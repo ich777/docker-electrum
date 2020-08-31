@@ -1,10 +1,55 @@
 #!/bin/bash
+export DISPLAY=:99
+export XDG_RUNTIME_DIR=/tmp/runtime-electrum
+
+CUR_V="$(python3 ${DATA_DIR}/run_electrum -o version 2>/dev/null)"
+LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/Electrum | grep LATEST | cut -d '=' -f2)"
+
+if [ -z "$LAT_V" ]; then
+	if [ ! -z "$CUR_V" ]; then
+		echo "---Can't get latest version of Electrum falling back to v$CUR_V---"
+		LAT_V="$CUR_V"
+	else
+		echo "---Something went wrong, can't get latest version of Electrum, putting container into sleep mode---"
+		sleep infinity
+	fi
+fi
+
+echo "---Version Check---"
+if [ -z "$CUR_V" ]; then
+	echo "---Electrum not installed, installing---"
+    cd ${DATA_DIR}
+	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Electrum-$LAT_V.tar.gz https://download.electrum.org/$LAT_V/Electrum-$LAT_V.tar.gz ; then
+    	echo "---Sucessfully downloaded Electrum---"
+    else
+    	echo "---Something went wrong, can't download Electrum, putting container in sleep mode---"
+        sleep infinity
+    fi
+	tar -C ${DATA_DIR} --strip-components=1 -xf ${DATA_DIR}/Electrum-$LAT_V.tar.gz
+	rm -R ${DATA_DIR}/Electrum-$LAT_V.tar.gz
+elif [ "$CUR_V" != "$LAT_V" ]; then
+	echo "---Version missmatch, installed v$CUR_V, downloading and installing latest v$LAT_V...---"
+    cd ${DATA_DIR}
+	rm -R ${DATA_DIR}/*
+	if wget -q -nc --show-progress --progress=bar:force:noscroll -O ${DATA_DIR}/Electrum-$LAT_V.tar.gz https://download.electrum.org/$LAT_V/Electrum-$LAT_V.tar.gz ; then
+    	echo "---Sucessfully downloaded Electrum---"
+    else
+    	echo "---Something went wrong, can't download Electrum, putting container in sleep mode---"
+        sleep infinity
+    fi
+	tar -C ${DATA_DIR} --strip-components=1 -xf ${DATA_DIR}/Electrum-$LAT_V.tar.gz
+	rm -R ${DATA_DIR}/Electrum-$LAT_V.tar.gz
+elif [ "$CUR_V" == "$LAT_V" ]; then
+	echo "---Electrum v$CUR_V up-to-date---"
+fi
+
 echo "---Preparing Server---"
 echo "---Checking for old logfiles---"
 find $DATA_DIR -name "XvfbLog.*" -exec rm -f {} \;
 find $DATA_DIR -name "x11vncLog.*" -exec rm -f {} \;
 echo "---Checking for old display lock files---"
 find /tmp -name ".X99*" -exec rm -f {} \; > /dev/null 2>&1
+screen -wipe 2&>/dev/null
 
 chmod -R ${DATA_PERM} ${DATA_DIR}
 
@@ -14,13 +59,13 @@ sleep 2
 echo "---Starting x11vnc server---"
 screen -S x11vnc -L -Logfile ${DATA_DIR}/x11vncLog.0 -d -m /opt/scripts/start-x11.sh
 sleep 2
+echo "---Starting Fluxbox---"
+screen -d -m env HOME=/etc /usr/bin/fluxbox
+sleep 2
 echo "---Starting noVNC server---"
 websockify -D --web=/usr/share/novnc/ --cert=/etc/ssl/novnc.pem 8080 localhost:5900
 sleep 2
 
-echo "---Container under development, Sleep zZz---"
-sleep infinity
-
 echo "---Starting jDownloader2---"
-export DISPLAY=:99
 cd ${DATA_DIR}
+/usr/bin/python3 ${DATA_DIR}/run_electrum
