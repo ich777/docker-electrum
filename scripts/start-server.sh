@@ -47,6 +47,10 @@ echo "---Preparing Server---"
 if [ ! -d ${DATA_DIR}/.electrum/wallets ]; then
 	mkdir -p ${DATA_DIR}/.electrum/wallets
 fi
+if [ ! -d /tmp/runtime-electrum ]; then
+	mkdir -p /tmp/runtime-electrum
+	chmod -R 0700 /tmp/runtime-electrum
+fi
 echo "---Resolution check---"
 if [ -z "${CUSTOM_RES_W} ]; then
 	CUSTOM_RES_W=1024
