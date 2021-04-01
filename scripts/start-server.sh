@@ -77,8 +77,8 @@ echo "---Checking for old logfiles---"
 find $DATA_DIR -name "XvfbLog.*" -exec rm -f {} \;
 find $DATA_DIR -name "x11vncLog.*" -exec rm -f {} \;
 echo "---Checking for old display lock files---"
-find /tmp -name ".X99*" -exec rm -f {} \; > /dev/null 2>&1
-find /tmp -name ".X11*" -exec rm -f {} \; > /dev/null 2>&1
+rm -rf /tmp/.X99*
+rm -rf /tmp/.X11*
 screen -wipe 2&>/dev/null
 
 chmod -R ${DATA_PERM} ${DATA_DIR}
