@@ -4,7 +4,7 @@ export XDG_RUNTIME_DIR=/tmp/runtime-electrum
 export XAUTHORITY=${DATA_DIR}/.Xauthority
 
 CUR_V="$(python3 ${DATA_DIR}/run_electrum -o version 2>/dev/null)"
-LAT_V="$(wget -qO- https://github.com/ich777/versions/raw/master/Electrum | grep LATEST | cut -d '=' -f2)"
+LAT_V="$(wget -qO- https://download.electrum.org/ | cut -d '"' -f8 | sed 's:/*$::' | sed '/^[^0-9]/d' | sed '/^[[:space:]]*$/d' | sort -V | tail -1)"
 
 if [ -z "$LAT_V" ]; then
 	if [ ! -z "$CUR_V" ]; then
