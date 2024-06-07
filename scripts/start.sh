@@ -29,7 +29,7 @@ chown -R ${UID}:${GID} ${DATA_DIR}
 
 echo "---Starting...---"
 term_handler() {
-	python3 ${DATA_DIR}/run_electrum stop >/dev/null 2>&1
+	rm -f ${DATA_DIR}/.electrum/daemon
 	kill -SIGTERM "$(pidof electrum)" 2>/dev/null
 	tail --pid="$(pidof electrum)" -f 2>/dev/null
 	exit 143;
