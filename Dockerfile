@@ -7,7 +7,7 @@ RUN export TZ=Europe/Rome && \
 	apt-get update && \
 	ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && \
 	echo $TZ > /etc/timezone && \
-	apt-get -y install --no-install-recommends python3-pyqt5 libsecp256k1-1 python3-cryptography python3-pyqt6&& \
+	apt-get -y install --no-install-recommends python3-pyqt5 libsecp256k1-1 python3-cryptography python3-pyqt6 && \
 	rm -rf /var/lib/apt/lists/* && \
 	sed -i '/    document.title =/c\    document.title = "Electrum - noVNC";' /usr/share/novnc/app/ui.js && \
 	rm /usr/share/novnc/app/images/icons/*
